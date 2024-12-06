@@ -7,7 +7,7 @@ from sklearn.ensemble import RandomForestRegressor
 import streamlit as st
 
 # Hardcoded API Key
-API_KEY = "02061ee61d38f43a26a134f24e9041d6"  # Replace with your actual API key
+API_KEY = "02061ee61d38f43a26a134f24e9041d6"  
 
 # Set Streamlit page config
 st.set_page_config(
@@ -16,7 +16,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Add custom CSS for styling
+
 def set_bg_color():
     st.markdown(
         """
@@ -107,28 +107,25 @@ def main():
     st.markdown("<p class='subtitle'>Analyze and predict weather trends with ease</p>", unsafe_allow_html=True)
     
     # Sidebar Configuration
-    st.sidebar.header("🔧 Settings")
-    city = st.sidebar.text_input("🌆 Enter City", "Toronto")
-    days = st.sidebar.slider("📅 Forecast Days (Max: 5)", 1, 5, 3)
-    
-    # Button to fetch data
-    if st.sidebar.button("Fetch Data 🌍"):
+    st.sidebar.header("Settings")
+city = st.sidebar.text_input("City", placeholder="Enter a city name")
+days = st.sidebar.slider("Forecast Days", 1, 5, 3)
+
+if st.sidebar.button("Fetch Data 🌍"):
+    if city:  # Ensure a city name is provided
         with st.spinner("Fetching weather data..."):
-            # Fetch Weather Data
             data = fetch_weather_data(city, days)
             if data is not None:
-                # Display raw data
-                with st.expander(f"📊 Weather Data for {city.capitalize()}"):
+                with st.expander(f"Weather Data for {city.capitalize()}"):
                     st.dataframe(data)
-
                 
-                # Train Model
                 data_with_predictions = train_model(data)
-                
-                # Visualize Trends
-                st.markdown("### 📈 Temperature Trends")
+                st.markdown("### Temperature Trends")
                 fig = plot_trends(data_with_predictions)
                 st.plotly_chart(fig)
+    else:
+        st.error("Please enter a city name!")
+
 
 if __name__ == "__main__":
     main()
