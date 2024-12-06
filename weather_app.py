@@ -41,7 +41,7 @@ def set_bg_color():
     )
 
 # Fetch Weather Data from OpenWeatherMap API
-def fetch_weather_data(city="Toronto", days=5):
+def fetch_weather_data(city, days):
     base_url = "https://api.openweathermap.org/data/2.5/forecast"
     params = {"q": city, "cnt": days * 8, "units": "metric", "appid": API_KEY}
     response = requests.get(base_url, params=params)
@@ -63,6 +63,7 @@ def fetch_weather_data(city="Toronto", days=5):
         for item in weather_list
     ]
     return pd.DataFrame(weather_data)
+
 
 # Train a Weather Prediction Model
 def train_model(data):
